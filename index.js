@@ -1,5 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+
 const keys = require('./config/keys');
 require('./models/user'); //include my user object. Make sure user model is required before we define this service. Order of execution bug otherwise.
 require('./services/passport'); //require passport services for google oAuth.
@@ -10,6 +13,13 @@ mongoose.connect(keys.mongoURI);
 
 const app = express(); //a new application that represents an express app.
 //set up configuration that will listen to requests and route the HTTP requests to different handlers
+
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey] //can provide multiple keys if needed, place key inside of array.
+  })
+);
 
 authRoutes(app); //call auth routes and pass in the app express instance.
 
