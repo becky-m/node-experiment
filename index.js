@@ -13,13 +13,15 @@ mongoose.connect(keys.mongoURI);
 
 const app = express(); //a new application that represents an express app.
 //set up configuration that will listen to requests and route the HTTP requests to different handlers
-
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey] //can provide multiple keys if needed, place key inside of array.
   })
 );
+
+app.use(passport.initialize()); //iniit passport to handle cookies.
+app.use(passport.session()); //start the session.
 
 authRoutes(app); //call auth routes and pass in the app express instance.
 
